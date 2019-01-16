@@ -1,0 +1,122 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style: none;
+}
+html, body{
+    padding: 10px 100px;
+    font-size: 12px;
+    font-family: "Microsoft YaHei"
+}
+.box{
+    width: 750px;
+    height: 385px;
+    border: 1px solid #eee;
+    padding: 6px 10px 0px 10px;
+    .header{
+        height: 35px;
+        overflow: hidden;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        .preYear{
+            float: left;
+            cursor: pointer;
+            display: none;
+        }
+        .preMon{
+            float: left;
+            cursor: pointer;
+        }
+        .nextYear{
+            float: right;
+            cursor: pointer;
+            display: none;
+        }
+        .nextMon{
+            float: right;
+            cursor: pointer;
+        }
+        .leftdate{
+            height: 35px;
+            width: 50%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            // background: Cyan;
+        }
+        .rightdate{
+            height: 35px;
+            width: 50%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            //background: skyblue;
+        }
+    }
+    .week{
+        overflow: hidden;
+        .leftdiv{
+            height: 20px;
+            float: left;
+            width: 350px;
+            li{
+                float: left;
+                width: 50px;
+                height: 20px;
+                line-height: 20px;
+                text-align: center;
+            }
+        }
+        .rightdiv{
+            height: 20px;
+            float: right;
+            width: 350px;
+            li{
+                float: left;
+                width: 50px;
+                height: 20px;
+                line-height: 20px;
+                text-align: center;
+            }
+        }
+    }
+    .con{
+        .leftul{
+            height: auto;
+            float: left;
+            width: 350px;
+            li{
+                float: left;
+                width: 50px;
+                height: 50px;
+                text-align: center;
+                line-height: 50px;
+                cursor: pointer;
+                box-sizing: border-box;
+                margin: 0 0 -1px -1px;
+            }
+            .cur{
+                border: 1px solid #eee;
+            }
+        }
+        .rightul{
+            height: auto;
+            float: right;
+            width: 350px;
+            li{
+                float: left;
+                width: 50px;
+                height: 50px;
+                text-align: center;
+                line-height: 50px;
+                cursor: pointer;
+                box-sizing: border-box;
+                margin: 0 0 -1px -1px;
+            }
+            .cur{
+                border: 1px solid #eee;
+            }
+        }
+    }
+}
