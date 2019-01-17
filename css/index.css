@@ -6,21 +6,20 @@
 }
 html,
 body {
-  padding: 10px 100px;
+  padding: 10px 200px;
   font-size: 12px;
   font-family: "Microsoft YaHei";
 }
 .box {
-  width: 750px;
-  height: 385px;
+  width: 752px;
+  height: auto;
   border: 1px solid #eee;
-  padding: 6px 10px 0px 10px;
+  overflow: hidden;
 }
 .box .header {
   height: 35px;
-  overflow: hidden;
-  border-bottom: 1px solid #eee;
   position: relative;
+  line-height: 35px;
 }
 .box .header .preYear {
   float: left;
@@ -28,7 +27,10 @@ body {
   display: none;
 }
 .box .header .preMon {
-  float: left;
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  top: 0;
   cursor: pointer;
 }
 .box .header .nextYear {
@@ -37,8 +39,30 @@ body {
   display: none;
 }
 .box .header .nextMon {
-  float: right;
+  position: absolute;
+  z-index: 2;
+  right: 16px;
+  top: 0;
   cursor: pointer;
+}
+.box .header .predate {
+  height: 35px;
+  width: 50%;
+  position: absolute;
+  left: -376px;
+  top: 0;
+  cursor: pointer;
+  background: skyblue;
+}
+.box .header .predate li {
+  float: left;
+  text-align: center;
+}
+.box .header .predate li:first-child {
+  margin-left: 140px;
+}
+.box .header .predate li:nth-child(2) {
+  margin-left: 13px;
 }
 .box .header .leftdate {
   height: 35px;
@@ -46,13 +70,54 @@ body {
   position: absolute;
   left: 0;
   top: 0;
+  cursor: pointer;
+}
+.box .header .leftdate li {
+  float: left;
+  text-align: center;
+}
+.box .header .leftdate li:first-child {
+  margin-left: 140px;
+}
+.box .header .leftdate li:nth-child(2) {
+  margin-left: 13px;
 }
 .box .header .rightdate {
   height: 35px;
   width: 50%;
   position: absolute;
-  right: 0;
+  left: 50%;
   top: 0;
+  cursor: pointer;
+}
+.box .header .rightdate li {
+  float: left;
+  text-align: center;
+}
+.box .header .rightdate li:first-child {
+  margin-left: 140px;
+}
+.box .header .rightdate li:nth-child(2) {
+  margin-left: 13px;
+}
+.box .header .nextTowdate {
+  height: 35px;
+  width: 50%;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  cursor: pointer;
+  background: skyblue;
+}
+.box .header .nextTowdate li {
+  float: left;
+  text-align: center;
+}
+.box .header .nextTowdate li:first-child {
+  margin-left: 140px;
+}
+.box .header .nextTowdate li:nth-child(2) {
+  margin-left: 13px;
 }
 .box .week {
   overflow: hidden;
@@ -61,6 +126,7 @@ body {
   height: 20px;
   float: left;
   width: 350px;
+  margin: 0 13px;
 }
 .box .week .leftdiv li {
   float: left;
@@ -73,6 +139,7 @@ body {
   height: 20px;
   float: right;
   width: 350px;
+  margin: 0 13px;
 }
 .box .week .rightdiv li {
   float: left;
@@ -81,17 +148,45 @@ body {
   line-height: 20px;
   text-align: center;
 }
-.box .con .leftul {
-  height: auto;
+.box .con {
+  padding-bottom: 1px;
+  min-height: 250px;
+  position: relative;
+  overflow: hidden;
+}
+.box .con .preul {
+  height: 251px;
   float: left;
   width: 350px;
+  position: absolute;
+  left: -363px;
+  top: 0;
+  background: Cyan;
+}
+.box .con .preul li {
+  float: left;
+  width: 51px;
+  height: 51px;
+  text-align: center;
+  line-height: 51px;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin: 0 0 -1px -1px;
+}
+.box .con .preul .cur {
+  border: 1px solid #eee;
+}
+.box .con .leftul {
+  float: left;
+  width: 350px;
+  margin-left: 13px;
 }
 .box .con .leftul li {
   float: left;
-  width: 50px;
-  height: 50px;
+  width: 51px;
+  height: 51px;
   text-align: center;
-  line-height: 50px;
+  line-height: 51px;
   cursor: pointer;
   box-sizing: border-box;
   margin: 0 0 -1px -1px;
@@ -99,21 +194,59 @@ body {
 .box .con .leftul .cur {
   border: 1px solid #eee;
 }
+.box .con .leftul .pastCss {
+  color: #FFCACCCD;
+}
 .box .con .rightul {
   height: auto;
-  float: right;
+  float: left;
   width: 350px;
+  margin-left: 26px;
 }
 .box .con .rightul li {
   float: left;
-  width: 50px;
-  height: 50px;
+  width: 51px;
+  height: 51px;
   text-align: center;
-  line-height: 50px;
+  line-height: 51px;
   cursor: pointer;
   box-sizing: border-box;
   margin: 0 0 -1px -1px;
 }
 .box .con .rightul .cur {
   border: 1px solid #eee;
+}
+.box .con .rightul .pastCss {
+  color: #FFCACCCD;
+}
+.box .con .nextTowul {
+  height: 251px;
+  float: left;
+  width: 350px;
+  position: absolute;
+  left: 761px;
+  top: 0;
+  background: blue;
+}
+.box .con .nextTowul li {
+  float: left;
+  width: 51px;
+  height: 51px;
+  text-align: center;
+  line-height: 51px;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin: 0 0 -1px -1px;
+}
+.box .con .nextTowul .cur {
+  border: 1px solid #eee;
+}
+.box .footer {
+  height: 40px;
+  margin: 0 16px;
+  background: #FFFCFCFC;
+  border-top: 1px solid #FFEAEBEF;
+  margin-top: 25px;
+  text-align: center;
+  line-height: 40px;
 }
