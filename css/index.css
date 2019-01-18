@@ -11,6 +11,10 @@ body {
   font-family: "Microsoft YaHei";
 }
 .box {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   width: 752px;
   height: auto;
   border: 1px solid #eee;
@@ -187,15 +191,21 @@ body {
   height: 51px;
   text-align: center;
   line-height: 51px;
-  cursor: pointer;
   box-sizing: border-box;
   margin: 0 0 -1px -1px;
 }
 .box .con .leftul .cur {
   border: 1px solid #eee;
+  cursor: pointer;
 }
 .box .con .leftul .pastCss {
-  color: #FFCACCCD;
+  color: rgba(255, 202, 204, 0.8);
+  cursor: default;
+}
+.box .con .leftul .selectedLi {
+  background: #D1A361;
+  color: #fff;
+  border: 1px solid #D1A361;
 }
 .box .con .rightul {
   height: auto;
@@ -209,15 +219,21 @@ body {
   height: 51px;
   text-align: center;
   line-height: 51px;
-  cursor: pointer;
   box-sizing: border-box;
   margin: 0 0 -1px -1px;
 }
 .box .con .rightul .cur {
   border: 1px solid #eee;
+  cursor: pointer;
 }
 .box .con .rightul .pastCss {
-  color: #FFCACCCD;
+  color: rgba(255, 202, 204, 0.8);
+  cursor: default;
+}
+.box .con .rightul .selectedLi {
+  background: #D1A361;
+  color: #fff;
+  border: 1px solid #D1A361;
 }
 .box .con .nextTowul {
   height: 251px;

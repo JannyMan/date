@@ -10,6 +10,10 @@ html, body{
     font-family: "Microsoft YaHei"
 }
 .box{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
     width: 752px;
     height: auto;
     border: 1px solid #eee;
@@ -188,12 +192,12 @@ html, body{
                 height: 51px;
                 text-align: center;
                 line-height: 51px;
-                cursor: pointer;
                 box-sizing: border-box;
                 margin: 0 0 -1px -1px;
             }
             .cur{
                 border: 1px solid #eee;
+                cursor: pointer;
             }
             .nowCss{
                 // background: #D1A361;
@@ -201,7 +205,13 @@ html, body{
                 // border: 1px solid #D1A361;
             }
             .pastCss{
-                color: #FFCACCCD;
+                color: rgba(255, 202, 204, 0.8);
+                cursor: default;
+            }
+            .selectedLi{
+                background: #D1A361;
+                color: #fff;
+                border: 1px solid #D1A361;
             }
         }
         .rightul{
@@ -216,12 +226,12 @@ html, body{
                 height: 51px;
                 text-align: center;
                 line-height: 51px;
-                cursor: pointer;
                 box-sizing: border-box;
                 margin: 0 0 -1px -1px;
             }
             .cur{
                 border: 1px solid #eee;
+                cursor: pointer;
             }
             .nowCss{
                 // background: #D1A361;
@@ -229,7 +239,13 @@ html, body{
                 // border: 1px solid #D1A361;
             }
             .pastCss{
-                color: #FFCACCCD;
+                color: rgba(255, 202, 204, 0.8);
+                cursor: default;
+            }
+            .selectedLi{
+                background: #D1A361;
+                color: #fff;
+                border: 1px solid #D1A361;
             }
         }
         .nextTowul{

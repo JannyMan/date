@@ -1,3 +1,4 @@
+//未来时间类  afterTime
 //一天的秒数
 const oneday = 86400
 let calendarObj
@@ -14,10 +15,12 @@ let nextTime = {}
 let nextTowTime = {}
 
 //今天的时间戳
-let nowDayStamp = (Date.parse((new Date()).getFullYear() + '-' + ((new Date()).getMonth() + 1) + '-' + (new Date()).getDate()))/1000
-console.log((new Date()).getFullYear() + '-' + ((new Date()).getMonth() + 1) + '-' + (new Date()).getDate())
-console.log(nowDayStamp)
+let nowDayStamp = (Date.parse(((new Date()).getFullYear() + '-' + ((new Date()).getMonth() + 1) + '-' + (new Date()).getDate()).replace(/-/g,"/")))/1000
 
+//开始时间结束时间  时间戳
+let recordTime = new Object()
+//点击辨别
+let clickCounts = 1
 
 function calendar(){
     calendarObj = this
@@ -73,8 +76,8 @@ calendar.prototype = {
             '<div class="footer"> 预定时长: 至少1晚</div>'
         )
 
-        //第左边日历显示时间
-        let nowTimeout = Date.parse((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + '01')
+        //左边日历显示时间
+        let nowTimeout = Date.parse(((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + '01').replace(/-/g,"/"))
         let weekDay = (new Date(nowTimeout)).getDay()
 
         //添加当月年份
@@ -99,8 +102,8 @@ calendar.prototype = {
         let days = (getnextStamp() - getcurrentStamp())/oneday
         for(let i = 0; i < days; i++){
             //计算这天时间戳
-            let liTimout = Date.parse((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + (i + 1))/1000
-            $(dom).find('>.con>.leftul').append('<li class="cur" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>')
+            let liTimout = Date.parse(((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + (i + 1)).replace(/-/g,"/"))/1000
+            $(dom).find('>.con>.leftul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>')
         }
 
         //添加下月日期
@@ -109,8 +112,8 @@ calendar.prototype = {
         }
         let nextdays = ( getnextTwoStamp() - getnextStamp())/oneday
         for(let i = 0; i < nextdays; i++){
-            let liTimout = Date.parse((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + (i + 1))/1000
-            $(dom).find('>.con>.rightul').append('<li class="cur" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>')
+            let liTimout = Date.parse(((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + (i + 1)).replace(/-/g,"/"))/1000
+            $(dom).find('>.con>.rightul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>')
         }
 
         //定位今天
@@ -118,8 +121,9 @@ calendar.prototype = {
         $(leftLi).each(function (index, val) {
             let timeout = $(val).attr('data-stamp')
             if(nowDayStamp > timeout){
-               $(val).addClass('pastCss')
+               $(val).addClass('pastCss').removeClass('afterTime')
             }else if( nowDayStamp == timeout ){
+                //$(val).addClass('nowCss').removeClass('afterTime')
                 $(val).addClass('nowCss')
             }
         })
@@ -127,11 +131,61 @@ calendar.prototype = {
         $(rightLi).each(function (index, val) {
             let timeout = $(val).attr('data-stamp')
             if(nowDayStamp > timeout){
-                $(val).addClass('pastCss')
+                $(val).addClass('pastCss').removeClass('afterTime')
              }else if( nowDayStamp == timeout ){
-                 $(val).addClass('nowCss')
+                //$(val).addClass('nowCss').removeClass('afterTime')
+                $(val).addClass('nowCss')
              }
         })
+        //添加日历点击事件
+        $('.afterTime').mouseup(function(){
+            if(clickCounts == 0){
+                delete recordTime.startTime
+                delete recordTime.endTime
+                clickCounts = 1
+            }
+            //第一次点击
+            if(clickCounts == 1){
+                recordTime.startTime = $(this).attr('data-stamp')
+                clickCounts = 2
+            }else if(clickCounts == 2){
+                if($(this).attr('data-stamp') > recordTime.startTime){
+                    recordTime.endTime = $(this).attr('data-stamp')
+                    clickCounts = 0
+                }else if($(this).attr('data-stamp') < recordTime.startTime){
+                    recordTime.endTime = recordTime.startTime
+                    recordTime.startTime = $(this).attr('data-stamp')
+                    clickCounts = 0
+                }
+                
+            }
+            render(dom, recordTime)
+        })
+
+        //render(dom, recordTime)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //点击切换
@@ -145,7 +199,6 @@ calendar.prototype = {
                 backYear = (timeObj['time'][0]).preYear - 1
                 backMon = 12
             }
-
             let obj1 = {}
             let obj2 = {}
             let obj3 = {}
@@ -165,7 +218,7 @@ calendar.prototype = {
             calendarVal.time.push(obj2)
             calendarVal.time.push(obj3)
             calendarVal.time.push(obj4)
-
+            console.log(calendarVal)
             //添加当月年份
             $(dom).find('>.header').find('>.leftdate').find('.year').html((timeObj['time'][1]).nowYear)
             $(dom).find('>.header').find('>.leftdate').find('.mon').html(getCapitalMon((timeObj['time'][1]).nowMon))
@@ -194,10 +247,14 @@ calendar.prototype = {
             let time1 = (timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + '01'
             let time2 = (timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01'
             let days = parseInt((getStamp(time2, time1)) / oneday)
+            console.log(days)
+            console.log(time2)
+            console.log(time1)
+            console.log(getStamp(time2, time1))
             for(let i = 0; i < days; i++){
                 //计算这天时间戳
-                let liTimout = Date.parse((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + (i + 1))/1000
-                $(dom).find('>.con>.leftul').append('<li class="cur" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>')
+                let liTimout = Date.parse(((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + (i + 1)).replace(/-/g,"/"))/1000
+                $(dom).find('>.con>.leftul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>')
             }
 
             //添加下月日期
@@ -215,8 +272,8 @@ calendar.prototype = {
             let time11 = (timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01'
             let nextdays = parseInt(getStamp(time21, time11) / oneday)
             for(let i = 0; i < nextdays; i++){
-                let liTimout = Date.parse((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + (i + 1))/1000
-                $(dom).find('>.con>.rightul').append('<li class="cur" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
+                let liTimout = Date.parse(((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + (i + 1)).replace(/-/g,"/"))/1000
+                $(dom).find('>.con>.rightul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
             }
 
             //定位今天
@@ -225,8 +282,9 @@ calendar.prototype = {
             $(leftLi).each(function (index, val) {
                 let timeout = $(val).attr('data-stamp')
                 if(nowDayStamp > timeout){
-                    $(val).addClass('pastCss')
-                 }else if( nowDayStamp == timeout ){
+                    $(val).addClass('pastCss').removeClass('afterTime')
+                }else if( nowDayStamp == timeout ){
+                    //$(val).addClass('nowCss').removeClass('afterTime')
                     $(val).addClass('nowCss')
                 }
             })
@@ -234,12 +292,42 @@ calendar.prototype = {
             $(rightLi).each(function (index, val) {
                 let timeout = $(val).attr('data-stamp')
                 if(nowDayStamp > timeout){
-                    $(val).addClass('pastCss')
+                    $(val).addClass('pastCss').removeClass('afterTime')
                 }else if( nowDayStamp == timeout ){
+                    //$(val).addClass('nowCss').removeClass('afterTime')
                     $(val).addClass('nowCss')
                 }
             })
+
+
+
         })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //下一月
         $(dom).find('>.header').find('>.nextMon').mouseup(function(){
@@ -272,6 +360,8 @@ calendar.prototype = {
             calendarVal.time.push(obj3)
             calendarVal.time.push(obj4)
 
+            console.log(calendarVal)
+
             //添加当月年份
             $(dom).find('>.header').find('>.leftdate').find('.year').html((timeObj['time'][1]).nowYear)
             $(dom).find('>.header').find('>.leftdate').find('.mon').html(getCapitalMon((timeObj['time'][1]).nowMon))
@@ -300,12 +390,12 @@ calendar.prototype = {
             let time1 = (timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + '01'
             let time2 = (timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01'
             let days = parseInt((getStamp(time2, time1)) / oneday)
-            console.log(days)
             for(let i = 0; i < days; i++){
-                let liTimout = Date.parse((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + (i + 1))/1000
-                $(dom).find('>.con>.leftul').append('<li class="cur" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
+                let liTimout = Date.parse(((timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + (i + 1)).replace(/-/g,"/"))/1000
+                $(dom).find('>.con>.leftul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
+                console.log(liTimout)
             }
-
+            
             //添加下月日期
             $(dom).find('>.con>.rightul').html('')
             if(getSelfWeek((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01') == 0){
@@ -321,8 +411,8 @@ calendar.prototype = {
             let time11 = (timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01'
             let nextdays = parseInt(getStamp(time21, time11) / oneday)
             for(let i = 0; i < nextdays; i++){
-                let liTimout = Date.parse((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + (i + 1))/1000
-                $(dom).find('>.con>.rightul').append('<li class="cur" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
+                let liTimout = Date.parse(((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + (i + 1)).replace(/-/g,"/"))/1000
+                $(dom).find('>.con>.rightul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
             }
 
             //定位今天
@@ -330,8 +420,9 @@ calendar.prototype = {
             $(leftLi).each(function (index, val) {
                 let timeout = $(val).attr('data-stamp')
                 if(nowDayStamp > timeout){
-                    $(val).addClass('pastCss')
+                    $(val).addClass('pastCss').removeClass('afterTime')
                 }else if( nowDayStamp == timeout ){
+                    //$(val).addClass('nowCss').removeClass('afterTime')
                     $(val).addClass('nowCss')
                 }
             })
@@ -339,21 +430,64 @@ calendar.prototype = {
             $(rightLi).each(function (index, val) {
                 let timeout = $(val).attr('data-stamp')
                 if(nowDayStamp > timeout){
-                    $(val).addClass('pastCss')
+                    $(val).addClass('pastCss').removeClass('afterTime')
                 }else if( nowDayStamp == timeout ){
+                    //$(val).addClass('nowCss').removeClass('afterTime')
                     $(val).addClass('nowCss')
                 }
             })
         })
     }
 }
-//添加点击事件
-function liClick(){
-    
+
+//根据时间戳添加日期显示样式
+function render(dom, timeObj){
+    console.log(dom, timeObj)
+    let boolen = $.isEmptyObject(timeObj)
+    if(!boolen){
+        //渲染开始时间
+        if(timeObj.startTime){
+            console.log(timeObj.startTime)
+            console.log(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime))
+            $(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime)).addClass('selectedLi')
+        }
+        if(timeObj.endTime){
+            $(selectedLi((dom + ' .con ul .afterTime'), timeObj.endTime)).addClass('selectedLi')
+        }
+    }else{
+        $(dom + ' .con ul .afterTime').removeClass('selectedLi')
+    }
 }
+//根据时间戳选择相应的li
+function selectedLi(dom, timeout){
+    let th = undefined
+    $(dom).each(function(){
+        if($(this).attr('data-stamp') == timeout){
+            th = this
+        }
+    })
+    return th
+}
+
+
+//添加现在和未来时间选择
+function getSelectTime(dom) {
+    //第一次点击
+    $(dom + ' .con ul li.afterTime').mouseup(function () {
+        console.log($(this).attr('data-stamp'))
+    })
+}
+
+
+
 //获取时间差  后一个时间 - 前一个时间
 function getStamp(time2, time1){
-    return Date.parse(time2)/1000 - Date.parse(time1)/1000
+    // console.log((new Date(time1)).getTime())
+    // console.log(Date.parse(time1)/1000)
+    // console.log((new Date(time2)).getTime())
+    // console.log(Date.parse(time2)/1000)
+    // console.log(Date.parse(time2)/1000 - Date.parse(time1)/1000)
+    return Date.parse(time2.replace(/-/g,"/") + ' 00:00:00')/1000 - Date.parse(time1.replace(/-/g,"/") + ' 00:00:00')/1000
 }
 //获取时间
 //getTime(getNowYear(), getNowMon())
@@ -428,7 +562,7 @@ function getNowDate(){
 //获取当月一号的时间戳
 function getcurrentStamp(){
     let date = new Date()
-    return (Date.parse(date.getFullYear() + '-' + date.getMonth() + 1 + '-' + '0'+'1'))/1000
+    return (Date.parse((date.getFullYear() + '-' + date.getMonth() + 1 + '-' + '0'+'1').replace(/-/g,"/")))/1000
 }
 //获取当月一号星期
 function getcurrentWeek(){
@@ -445,20 +579,20 @@ function getSelfWeek(obj){
 function getnextStamp(){
     let date = new Date()
     if(date.getMonth() + 1 < 12){
-        return (Date.parse(date.getFullYear() + '-' + date.getMonth() + 2 + '-' + '0'+'1'))/1000
+        return (Date.parse((date.getFullYear() + '-' + date.getMonth() + 2 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }if(date.getMonth() + 1 == 12){
-        return (Date.parse(date.getFullYear() + 1 + '-' + date.getMonth() + 1 + '-' + '0'+'1'))/1000
+        return (Date.parse((date.getFullYear() + 1 + '-' + date.getMonth() + 1 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }
 }
 //获取下两个月一号的时间戳
 function getnextTwoStamp(){
     let date = new Date()
     if(date.getMonth() + 3 <= 12){
-        return (Date.parse(date.getFullYear() + '-' + date.getMonth() + 3 + '-' + '0'+'1'))/1000
+        return (Date.parse((date.getFullYear() + '-' + date.getMonth() + 3 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }if(date.getMonth() + 3 == 13){
-        return (Date.parse(date.getFullYear() + 1 + '-' + date.getMonth() + 2 + '-' + '0'+'1'))/1000
+        return (Date.parse((date.getFullYear() + 1 + '-' + date.getMonth() + 2 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }if(date.getMonth() + 3 == 14){
-        return (Date.parse(date.getFullYear() + 1 + '-' + date.getMonth() + 3 + '-' + '0'+'1'))/1000
+        return (Date.parse((date.getFullYear() + 1 + '-' + date.getMonth() + 3 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }
 }
 //获取下月一号星期
