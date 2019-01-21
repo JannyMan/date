@@ -29,6 +29,7 @@ calendar.prototype = {
     Init: function(dom){
         let timeObj = getTime(getNowYear(), getNowMon())
         $(dom).append(
+            
             '<div class="header">'+
                 '<span class="preYear">上一年</span>'+
                 '<span class="preMon"><span class="iconfont icon-zuo"></span></span>'+
@@ -152,10 +153,11 @@ calendar.prototype = {
                 if($(this).attr('data-stamp') > recordTime.startTime){
                     recordTime.endTime = $(this).attr('data-stamp')
                     clickCounts = 0
+                    calendarObj.on_getdtae(recordTime)
+                    console.log(calendarObj)
                 }else if($(this).attr('data-stamp') < recordTime.startTime){
-                    recordTime.endTime = recordTime.startTime
                     recordTime.startTime = $(this).attr('data-stamp')
-                    clickCounts = 0
+                    clickCounts = 1
                 }
                 
             }
@@ -437,18 +439,24 @@ calendar.prototype = {
                 }
             })
         })
+    },
+    remove: function(obj){
+        $(obj).html('')
+    },
+    on_getdtae: function(res){
+
     }
 }
 
 //根据时间戳添加日期显示样式
 function render(dom, timeObj){
-    console.log(dom, timeObj)
+    //console.log(dom, timeObj)
     let boolen = $.isEmptyObject(timeObj)
     if(!boolen){
         //渲染开始时间
         if(timeObj.startTime){
-            console.log(timeObj.startTime)
-            console.log(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime))
+            //console.log(timeObj.startTime)
+            //console.log(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime))
             $(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime)).addClass('selectedLi')
         }
         if(timeObj.endTime){
