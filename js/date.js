@@ -251,9 +251,9 @@ calendar.prototype = {
             let time1 = (timeObj['time'][1]).nowYear + '-' + (timeObj['time'][1]).nowMon + '-' + '01'
             let time2 = (timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01'
             let days = parseInt((getStamp(time2, time1)) / oneday)
-            console.log(days)
-            console.log(time2)
-            console.log(time1)
+            // console.log(days)
+            // console.log(time2)
+            // console.log(time1)
             console.log(getStamp(time2, time1))
             for(let i = 0; i < days; i++){
                 //计算这天时间戳
@@ -315,6 +315,7 @@ calendar.prototype = {
                 if(clickCounts == 1){
                     recordTime.startTime = $(this).attr('data-stamp')
                     clickCounts = 2
+                    hoverDom(dom, recordTime)
                 }else if(clickCounts == 2){
                     if($(this).attr('data-stamp') > recordTime.startTime){
                         recordTime.endTime = $(this).attr('data-stamp')
@@ -324,13 +325,11 @@ calendar.prototype = {
                     }else if($(this).attr('data-stamp') < recordTime.startTime){
                         recordTime.startTime = $(this).attr('data-stamp')
                         clickCounts = 2
+                        hoverDom(dom, recordTime)
                     }
                 }
                 render(dom, recordTime)
             })
-
-
-
         })
 
 
@@ -389,8 +388,6 @@ calendar.prototype = {
             calendarVal.time.push(obj2)
             calendarVal.time.push(obj3)
             calendarVal.time.push(obj4)
-
-            console.log(calendarVal)
 
             //添加当月年份
             $(dom).find('>.header').find('>.leftdate').find('.year').html((timeObj['time'][1]).nowYear)
@@ -478,6 +475,7 @@ calendar.prototype = {
                 if(clickCounts == 1){
                     recordTime.startTime = $(this).attr('data-stamp')
                     clickCounts = 2
+                    hoverDom(dom, recordTime)
                 }else if(clickCounts == 2){
                     if($(this).attr('data-stamp') > recordTime.startTime){
                         recordTime.endTime = $(this).attr('data-stamp')
@@ -487,6 +485,7 @@ calendar.prototype = {
                     }else if($(this).attr('data-stamp') < recordTime.startTime){
                         recordTime.startTime = $(this).attr('data-stamp')
                         clickCounts = 2
+                        hoverDom(dom, recordTime)
                     }
 
                 }
@@ -558,13 +557,13 @@ function selectedLi(dom, timeout, obj){
 }
 
 
-//添加现在和未来时间选择
-function getSelectTime(dom) {
-    //第一次点击
-    $(dom + ' .con ul li.afterTime').mouseup(function () {
-        console.log($(this).attr('data-stamp'))
-    })
-}
+// //添加现在和未来时间选择
+// function getSelectTime(dom) {
+//     //第一次点击
+//     $(dom + ' .con ul li.afterTime').mouseup(function () {
+//         console.log($(this).attr('data-stamp'))
+//     })
+// }
 
 
 
