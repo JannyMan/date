@@ -207,6 +207,11 @@ body {
   color: #fff;
   border: 1px solid #D1A361;
 }
+.box .con .leftul .hoverLi {
+  background: Cyan;
+  color: #fff;
+  border: 1px solid #D1A361;
+}
 .box .con .rightul {
   height: auto;
   float: left;
@@ -232,6 +237,11 @@ body {
 }
 .box .con .rightul .selectedLi {
   background: #D1A361;
+  color: #fff;
+  border: 1px solid #D1A361;
+}
+.box .con .rightul .hoverLi {
+  background: Cyan;
   color: #fff;
   border: 1px solid #D1A361;
 }
@@ -266,3 +276,4 @@ body {
   text-align: center;
   line-height: 40px;
 }
+/*# sourceMappingURL=index.css.map */

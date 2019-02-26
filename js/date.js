@@ -29,7 +29,7 @@ calendar.prototype = {
     Init: function(dom){
         let timeObj = getTime(getNowYear(), getNowMon())
         $(dom).append(
-            
+
             '<div class="header">'+
                 '<span class="preYear">上一年</span>'+
                 '<span class="preMon"><span class="iconfont icon-zuo"></span></span>'+
@@ -149,6 +149,7 @@ calendar.prototype = {
             if(clickCounts == 1){
                 recordTime.startTime = $(this).attr('data-stamp')
                 clickCounts = 2
+                hoverDom(dom, recordTime)
             }else if(clickCounts == 2){
                 if($(this).attr('data-stamp') > recordTime.startTime){
                     recordTime.endTime = $(this).attr('data-stamp')
@@ -157,9 +158,10 @@ calendar.prototype = {
                     console.log(calendarObj)
                 }else if($(this).attr('data-stamp') < recordTime.startTime){
                     recordTime.startTime = $(this).attr('data-stamp')
-                    clickCounts = 1
+                    clickCounts = 2
+                    hoverDom(dom, recordTime)
                 }
-                
+
             }
             render(dom, recordTime)
         })
@@ -302,6 +304,32 @@ calendar.prototype = {
             })
 
 
+            //添加日历点击事件
+            $('.afterTime').mouseup(function(){
+                if(clickCounts == 0){
+                    delete recordTime.startTime
+                    delete recordTime.endTime
+                    clickCounts = 1
+                }
+                //第一次点击
+                if(clickCounts == 1){
+                    recordTime.startTime = $(this).attr('data-stamp')
+                    clickCounts = 2
+                }else if(clickCounts == 2){
+                    if($(this).attr('data-stamp') > recordTime.startTime){
+                        recordTime.endTime = $(this).attr('data-stamp')
+                        clickCounts = 0
+                        calendarObj.on_getdtae(recordTime)
+                        console.log(calendarObj)
+                    }else if($(this).attr('data-stamp') < recordTime.startTime){
+                        recordTime.startTime = $(this).attr('data-stamp')
+                        clickCounts = 2
+                    }
+                }
+                render(dom, recordTime)
+            })
+
+
 
         })
 
@@ -397,7 +425,7 @@ calendar.prototype = {
                 $(dom).find('>.con>.leftul').append('<li class="cur afterTime" data-stamp="'+ liTimout +'">'+ parseInt(i + 1 ) +'</li>').find('li')
                 console.log(liTimout)
             }
-            
+
             //添加下月日期
             $(dom).find('>.con>.rightul').html('')
             if(getSelfWeek((timeObj['time'][2]).nextYear + '-' + (timeObj['time'][2]).nextMon + '-' + '01') == 0){
@@ -438,6 +466,32 @@ calendar.prototype = {
                     $(val).addClass('nowCss')
                 }
             })
+
+            //添加日历点击事件
+            $('.afterTime').mouseup(function(){
+                if(clickCounts == 0){
+                    delete recordTime.startTime
+                    delete recordTime.endTime
+                    clickCounts = 1
+                }
+                //第一次点击
+                if(clickCounts == 1){
+                    recordTime.startTime = $(this).attr('data-stamp')
+                    clickCounts = 2
+                }else if(clickCounts == 2){
+                    if($(this).attr('data-stamp') > recordTime.startTime){
+                        recordTime.endTime = $(this).attr('data-stamp')
+                        clickCounts = 0
+                        calendarObj.on_getdtae(recordTime)
+                        console.log(calendarObj)
+                    }else if($(this).attr('data-stamp') < recordTime.startTime){
+                        recordTime.startTime = $(this).attr('data-stamp')
+                        clickCounts = 2
+                    }
+
+                }
+                render(dom, recordTime)
+            })
         })
     },
     remove: function(obj){
@@ -448,27 +502,53 @@ calendar.prototype = {
     }
 }
 
+//添加鼠标移动事件
+function hoverDom(dom, timeout) {
+    //第一次选择的时间
+    console.log(timeout.startTime)
+    $(dom + ' .con ul .afterTime').mousemove(function () {
+        //正在移动的li的时间
+        let nowTime = $(this).attr('data-stamp')
+    //     console.log(timeout.startTime)
+    //    console.log(nowTime)
+       if(nowTime > timeout.startTime){
+        $('.afterTime').each(function(index, val){
+            if(timeout.startTime <= $(val).attr('data-stamp') &&  $(val).attr('data-stamp') <= nowTime){
+                $(this).addClass('selectedLi')
+            }else{
+                $(this).removeClass('selectedLi')
+            }
+        })
+        
+       }
+    })
+    
+}
+
+
 //根据时间戳添加日期显示样式
 function render(dom, timeObj){
-    //console.log(dom, timeObj)
     let boolen = $.isEmptyObject(timeObj)
     if(!boolen){
         //渲染开始时间
-        if(timeObj.startTime){
-            //console.log(timeObj.startTime)
-            //console.log(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime))
-            $(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime)).addClass('selectedLi')
-        }
         if(timeObj.endTime){
-            $(selectedLi((dom + ' .con ul .afterTime'), timeObj.endTime)).addClass('selectedLi')
+            $(selectedLi((dom + ' .con ul .afterTime'), timeObj.endTime, 'endTime')).addClass('selectedLi')
+        }else if(timeObj.startTime){
+            $(selectedLi((dom + ' .con ul .afterTime'), timeObj.startTime, 'startTime')).addClass('selectedLi')
         }
+
     }else{
         $(dom + ' .con ul .afterTime').removeClass('selectedLi')
     }
 }
 //根据时间戳选择相应的li
-function selectedLi(dom, timeout){
+function selectedLi(dom, timeout, obj){
     let th = undefined
+    if(obj == 'startTime'){
+        $(dom).each(function(){
+            $(this).removeClass('selectedLi')
+        })
+    }
     $(dom).each(function(){
         if($(this).attr('data-stamp') == timeout){
             th = this
@@ -490,11 +570,6 @@ function getSelectTime(dom) {
 
 //获取时间差  后一个时间 - 前一个时间
 function getStamp(time2, time1){
-    // console.log((new Date(time1)).getTime())
-    // console.log(Date.parse(time1)/1000)
-    // console.log((new Date(time2)).getTime())
-    // console.log(Date.parse(time2)/1000)
-    // console.log(Date.parse(time2)/1000 - Date.parse(time1)/1000)
     return Date.parse(time2.replace(/-/g,"/") + ' 00:00:00')/1000 - Date.parse(time1.replace(/-/g,"/") + ' 00:00:00')/1000
 }
 //获取时间
@@ -570,7 +645,7 @@ function getNowDate(){
 //获取当月一号的时间戳
 function getcurrentStamp(){
     let date = new Date()
-    return (Date.parse((date.getFullYear() + '-' + date.getMonth() + 1 + '-' + '0'+'1').replace(/-/g,"/")))/1000
+    return (Date.parse((date.getFullYear() + '-' +  + '0' + (parseInt(date.getMonth()) + 1) + '-' + '0'+'1').replace(/-/g,"/")))/1000
 }
 //获取当月一号星期
 function getcurrentWeek(){
@@ -587,7 +662,7 @@ function getSelfWeek(obj){
 function getnextStamp(){
     let date = new Date()
     if(date.getMonth() + 1 < 12){
-        return (Date.parse((date.getFullYear() + '-' + date.getMonth() + 2 + '-' + '0'+'1').replace(/-/g,"/")))/1000
+        return (Date.parse((date.getFullYear() + '-' + '0' + (parseInt(date.getMonth()) + 2) + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }if(date.getMonth() + 1 == 12){
         return (Date.parse((date.getFullYear() + 1 + '-' + date.getMonth() + 1 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }
@@ -595,8 +670,9 @@ function getnextStamp(){
 //获取下两个月一号的时间戳
 function getnextTwoStamp(){
     let date = new Date()
+    console.log(date.getMonth() + 1)
     if(date.getMonth() + 3 <= 12){
-        return (Date.parse((date.getFullYear() + '-' + date.getMonth() + 3 + '-' + '0'+'1').replace(/-/g,"/")))/1000
+        return (Date.parse((date.getFullYear() + '-' + '0' + (parseInt(date.getMonth()) + 3) + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }if(date.getMonth() + 3 == 13){
         return (Date.parse((date.getFullYear() + 1 + '-' + date.getMonth() + 2 + '-' + '0'+'1').replace(/-/g,"/")))/1000
     }if(date.getMonth() + 3 == 14){
