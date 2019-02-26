@@ -154,7 +154,7 @@ calendar.prototype = {
                 if($(this).attr('data-stamp') > recordTime.startTime){
                     recordTime.endTime = $(this).attr('data-stamp')
                     clickCounts = 0
-                    calendarObj.on_getdtae(recordTime)
+                    calendarObj.on_getdate(recordTime)
                     console.log(calendarObj)
                 }else if($(this).attr('data-stamp') < recordTime.startTime){
                     recordTime.startTime = $(this).attr('data-stamp')
@@ -320,7 +320,7 @@ calendar.prototype = {
                     if($(this).attr('data-stamp') > recordTime.startTime){
                         recordTime.endTime = $(this).attr('data-stamp')
                         clickCounts = 0
-                        calendarObj.on_getdtae(recordTime)
+                        calendarObj.on_getdate(recordTime)
                         console.log(calendarObj)
                     }else if($(this).attr('data-stamp') < recordTime.startTime){
                         recordTime.startTime = $(this).attr('data-stamp')
@@ -331,32 +331,6 @@ calendar.prototype = {
                 render(dom, recordTime)
             })
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //下一月
         $(dom).find('>.header').find('>.nextMon').mouseup(function(){
@@ -480,8 +454,7 @@ calendar.prototype = {
                     if($(this).attr('data-stamp') > recordTime.startTime){
                         recordTime.endTime = $(this).attr('data-stamp')
                         clickCounts = 0
-                        calendarObj.on_getdtae(recordTime)
-                        console.log(calendarObj)
+                        calendarObj.on_getdate(recordTime)
                     }else if($(this).attr('data-stamp') < recordTime.startTime){
                         recordTime.startTime = $(this).attr('data-stamp')
                         clickCounts = 2
@@ -496,8 +469,8 @@ calendar.prototype = {
     remove: function(obj){
         $(obj).html('')
     },
-    on_getdtae: function(res){
-
+    on_getdate: function(res){
+        
     }
 }
 
@@ -508,14 +481,16 @@ function hoverDom(dom, timeout) {
     $(dom + ' .con ul .afterTime').mousemove(function () {
         //正在移动的li的时间
         let nowTime = $(this).attr('data-stamp')
-    //     console.log(timeout.startTime)
-    //    console.log(nowTime)
        if(nowTime > timeout.startTime){
         $('.afterTime').each(function(index, val){
-            if(timeout.startTime <= $(val).attr('data-stamp') &&  $(val).attr('data-stamp') <= nowTime){
+            if(timeout.startTime == $(val).attr('data-stamp') || $(val).attr('data-stamp') == nowTime){
+                $(this).removeClass('hoverLi')
                 $(this).addClass('selectedLi')
+            }else if(timeout.startTime < $(val).attr('data-stamp') &&  $(val).attr('data-stamp') < nowTime){
+                $(this).addClass('hoverLi')
             }else{
                 $(this).removeClass('selectedLi')
+                $(this).removeClass('hoverLi')
             }
         })
         
@@ -555,16 +530,6 @@ function selectedLi(dom, timeout, obj){
     })
     return th
 }
-
-
-// //添加现在和未来时间选择
-// function getSelectTime(dom) {
-//     //第一次点击
-//     $(dom + ' .con ul li.afterTime').mouseup(function () {
-//         console.log($(this).attr('data-stamp'))
-//     })
-// }
-
 
 
 //获取时间差  后一个时间 - 前一个时间

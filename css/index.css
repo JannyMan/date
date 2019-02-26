@@ -203,14 +203,14 @@ body {
   cursor: default;
 }
 .box .con .leftul .selectedLi {
-  background: #D1A361;
+  background: #CFA972;
   color: #fff;
-  border: 1px solid #D1A361;
+  border: 1px solid #CFA972;
 }
 .box .con .leftul .hoverLi {
-  background: Cyan;
+  background: #ECC896;
   color: #fff;
-  border: 1px solid #D1A361;
+  border: 1px solid #ECC896;
 }
 .box .con .rightul {
   height: auto;
@@ -236,14 +236,14 @@ body {
   cursor: default;
 }
 .box .con .rightul .selectedLi {
-  background: #D1A361;
+  background: #CFA972;
   color: #fff;
-  border: 1px solid #D1A361;
+  border: 1px solid #CFA972;
 }
 .box .con .rightul .hoverLi {
-  background: Cyan;
+  background: #ECC896;
   color: #fff;
-  border: 1px solid #D1A361;
+  border: 1px solid #ECC896;
 }
 .box .con .nextTowul {
   height: 251px;
@@ -276,4 +276,3 @@ body {
   text-align: center;
   line-height: 40px;
 }
-/*# sourceMappingURL=index.css.map */
